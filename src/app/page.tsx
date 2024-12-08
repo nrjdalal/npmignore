@@ -27,7 +27,21 @@ const formSchema = z.object({
   perPage: z.coerce.number().int().min(1).max(100),
 })
 
-export default function Page() {
+export default function SuspensePage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-dvh items-center justify-center">
+          <Loader2 className="animate-spin" />
+        </main>
+      }
+    >
+      <Page />
+    </Suspense>
+  )
+}
+
+function Page() {
   const params = useSearchParams()
 
   const [searching, setSearching] = useState(false)
@@ -85,25 +99,21 @@ export default function Page() {
                 <FormItem className="relative w-full">
                   <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 transform text-zinc-500" />
                   <FormControl>
-                    <Suspense fallback={null}>
-                      <Input
-                        className="!m-0 h-12 rounded-none border-none bg-gray-200 pl-12 !text-base !text-zinc-600 shadow-none placeholder:text-gray-400 focus-visible:ring-inset"
-                        {...field}
-                        placeholder="Search packages"
-                        onChange={(e) => {
-                          const newPrams = new URLSearchParams(
-                            params.toString(),
-                          )
-                          newPrams.set('q', e.target.value)
-                          window.history.pushState(
-                            null,
-                            '',
-                            `?${newPrams.toString()}`,
-                          )
-                          field.onChange(e)
-                        }}
-                      />
-                    </Suspense>
+                    <Input
+                      className="!m-0 h-12 rounded-none border-none bg-gray-200 pl-12 !text-base !text-zinc-600 shadow-none placeholder:text-gray-400 focus-visible:ring-inset"
+                      {...field}
+                      placeholder="Search packages"
+                      onChange={(e) => {
+                        const newPrams = new URLSearchParams(params.toString())
+                        newPrams.set('q', e.target.value)
+                        window.history.pushState(
+                          null,
+                          '',
+                          `?${newPrams.toString()}`,
+                        )
+                        field.onChange(e)
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
