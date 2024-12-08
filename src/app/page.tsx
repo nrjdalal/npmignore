@@ -74,18 +74,18 @@ export default function Page() {
   })
 
   return (
-    <Suspense fallback={<Loader2 className="animate-spin" />}>
-      <main className="mx-auto max-w-screen-md space-y-5 p-5">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="flex items-center">
-              <FormField
-                control={form.control}
-                name="q"
-                render={({ field }) => (
-                  <FormItem className="relative w-full">
-                    <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 transform text-zinc-500" />
-                    <FormControl>
+    <main className="mx-auto max-w-screen-md space-y-5 p-5">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="flex items-center">
+            <FormField
+              control={form.control}
+              name="q"
+              render={({ field }) => (
+                <FormItem className="relative w-full">
+                  <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 transform text-zinc-500" />
+                  <FormControl>
+                    <Suspense fallback={null}>
                       <Input
                         className="!m-0 h-12 rounded-none border-none bg-gray-200 pl-12 !text-base !text-zinc-600 shadow-none placeholder:text-gray-400 focus-visible:ring-inset"
                         {...field}
@@ -103,85 +103,85 @@ export default function Page() {
                           field.onChange(e)
                         }}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                    </Suspense>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <button
-                className="flex h-12 items-center justify-center rounded-none bg-zinc-950 px-8 text-sm font-semibold text-white"
-                type="submit"
-                onClick={() => setSearching(true)}
-              >
-                Search
-              </button>
-            </div>
-          </form>
-        </Form>
+            <button
+              className="flex h-12 items-center justify-center rounded-none bg-zinc-950 px-8 text-sm font-semibold text-white"
+              type="submit"
+              onClick={() => setSearching(true)}
+            >
+              Search
+            </button>
+          </div>
+        </form>
+      </Form>
 
-        <div className="grid grid-cols-1 gap-5">
-          {(searching || isLoading) && (
-            <div className="flex h-24 min-h-dvh justify-center">
-              <Loader2 className="mt-24 animate-spin" />
-            </div>
-          )}
-          {isError && (
-            <div className="flex h-24 min-h-dvh justify-center">
-              <p className="mt-24">Something went wrong!</p>
-            </div>
-          )}
-          {!searching && data?.objects.length && (
-            <div className="min-h-dvh divide-y">
-              <p className="py-5 font-bold">{data.total} packages found</p>
-              {data?.objects.map((item) => (
-                <div key={item.package.name} className="py-3">
-                  <div>
-                    <h3 className="flex gap-x-4 font-semibold">
-                      {item.package.name}
-                      {params.get('q') === item.package.name && (
-                        <span className="flex items-center rounded-md bg-purple-200 px-2 text-xs font-normal text-zinc-600">
-                          exact match
-                        </span>
-                      )}
-                    </h3>
-                  </div>
-                  <p className="mt-1 text-sm text-zinc-500">
-                    {item.package.description}
-                  </p>
-                  <div className="mt-5 flex items-center justify-between">
-                    <Link
-                      className="flex items-center gap-x-2 text-zinc-500"
-                      href={`https://www.npmjs.com/~${item.package.publisher.name}`}
-                      target="_blank"
-                    >
-                      <img
-                        className="rounded-sm"
-                        src={
-                          'https://npmjs.com/' +
-                          item.package.publisher.avatars.small
-                        }
-                        alt={item.package.name}
-                        height={24}
-                        width={24}
-                      />
-                      <p className="text-sm font-semibold">
-                        {item.package.publisher.name}
-                      </p>
-                    </Link>
-                    <p className="flex items-center gap-x-1.5 text-sm">
-                      <Download className="size-4" />
-                      <span className="mt-px">
-                        {humanNumbers(item.package.downloads.monthly)}
+      <div className="grid grid-cols-1 gap-5">
+        {(searching || isLoading) && (
+          <div className="flex h-24 min-h-dvh justify-center">
+            <Loader2 className="mt-24 animate-spin" />
+          </div>
+        )}
+        {isError && (
+          <div className="flex h-24 min-h-dvh justify-center">
+            <p className="mt-24">Something went wrong!</p>
+          </div>
+        )}
+        {!searching && data?.objects.length && (
+          <div className="min-h-dvh divide-y">
+            <p className="py-5 font-bold">{data.total} packages found</p>
+            {data?.objects.map((item) => (
+              <div key={item.package.name} className="py-3">
+                <div>
+                  <h3 className="flex gap-x-4 font-semibold">
+                    {item.package.name}
+                    {params.get('q') === item.package.name && (
+                      <span className="flex items-center rounded-md bg-purple-200 px-2 text-xs font-normal text-zinc-600">
+                        exact match
                       </span>
-                    </p>
-                  </div>
+                    )}
+                  </h3>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </main>
-    </Suspense>
+                <p className="mt-1 text-sm text-zinc-500">
+                  {item.package.description}
+                </p>
+                <div className="mt-5 flex items-center justify-between">
+                  <Link
+                    className="flex items-center gap-x-2 text-zinc-500"
+                    href={`https://www.npmjs.com/~${item.package.publisher.name}`}
+                    target="_blank"
+                  >
+                    <img
+                      className="rounded-sm"
+                      src={
+                        'https://npmjs.com/' +
+                        item.package.publisher.avatars.small
+                      }
+                      alt={item.package.name}
+                      height={24}
+                      width={24}
+                    />
+                    <p className="text-sm font-semibold">
+                      {item.package.publisher.name}
+                    </p>
+                  </Link>
+                  <p className="flex items-center gap-x-1.5 text-sm">
+                    <Download className="size-4" />
+                    <span className="mt-px">
+                      {humanNumbers(item.package.downloads.monthly)}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </main>
   )
 }
