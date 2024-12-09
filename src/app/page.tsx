@@ -344,7 +344,7 @@ function Page() {
                     {item.package.keywords.slice(0, 14).map((keyword) => (
                       <span
                         key={keyword}
-                        className="rounded-md bg-gray-100 px-2 py-1 text-xs text-zinc-600 dark:bg-zinc-800"
+                        className="rounded-md bg-gray-100 px-2 py-1 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
                       >
                         <Link
                           href={`/?q=keyword:${keyword}`}
