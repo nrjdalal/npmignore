@@ -232,7 +232,7 @@ function Page() {
                 </p>
 
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {item.package.keywords.map((keyword) => (
+                  {item.package.keywords.slice(0, 14).map((keyword) => (
                     <span
                       key={keyword}
                       className="rounded-md bg-gray-100 px-2 py-1 text-xs text-zinc-600"
@@ -260,6 +260,16 @@ function Page() {
                       </Link>
                     </span>
                   ))}
+                  {item.package.keywords.length > 13 && (
+                    <Link
+                      href={
+                        'https://www.npmjs.com/package/' + item.package.name
+                      }
+                      className="rounded-md bg-gray-100 px-2 py-1 text-xs text-zinc-600"
+                    >
+                      View {item.package.keywords.length - 13} more
+                    </Link>
+                  )}
                 </div>
                 <div className="mt-3 flex items-center justify-between">
                   <div className="flex items-center gap-x-2 text-zinc-500">
