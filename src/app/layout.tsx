@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Providers from '@/app/providers'
+import { fontMono, fontSans } from '@/lib/fonts'
+import { cn } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: 'npmignore',
@@ -14,7 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-dvh antialiased">
+      <body
+        className={cn(
+          'min-h-dvh select-none font-sans antialiased',
+          fontSans.variable,
+          fontMono.variable,
+        )}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>

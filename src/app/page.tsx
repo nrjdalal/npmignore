@@ -41,6 +41,7 @@ const formSchema = z.object({
   ]),
   niSort: z.enum(['disabled', 'downloads', 'dependents']),
   niTitleMatch: z.boolean(),
+  niDownloads: z.string(),
 })
 
 export default function SuspensePage() {
@@ -79,6 +80,7 @@ function Page() {
           | 'published_at') || '',
       niSort: 'disabled',
       niTitleMatch: false,
+      niDownloads: params.get('niDownloads') || '0',
     },
   })
 
@@ -118,7 +120,16 @@ function Page() {
 
   return (
     <main className="mx-auto max-w-screen-lg px-3.5 pb-10 md:px-10">
-      <h1 className="mt-2 text-xl font-bold">npmignore - npm on steroids</h1>
+      <h1 className="mt-2 text-xl font-bold">
+        npmignore by{' '}
+        <Link
+          className="border-b border-gray-300"
+          href="https://rdt.li/x-nrjdalal"
+          target="_blank"
+        >
+          nrjdalal
+        </Link>
+      </h1>
 
       <Form {...form}>
         <form>
@@ -221,8 +232,8 @@ function Page() {
             </Select>
           </div>
 
-          <div className="flex items-center space-x-2 border-y">
-            <p className="font-semibold text-zinc-500">Filters</p>
+          <div className="flex items-center border-y">
+            <p className="pr-3 font-semibold text-zinc-500">Filters</p>
             <Select
               onValueChange={(value) => {
                 setSearching(true)
@@ -237,16 +248,39 @@ function Page() {
               }}
               defaultValue={form.getValues().niSort}
             >
-              <SelectTrigger className="w-36 rounded-none border-x border-y-0 shadow-none">
+              <SelectTrigger className="w-36 rounded-none border-y-0 border-l border-r-0 shadow-none ring-inset">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent
                 className="rounded-none text-xs shadow-none"
-                align="center"
+                align="start"
               >
                 <SelectItem value="disabled">Sort: Disabled</SelectItem>
                 <SelectItem value="downloads">Downloads</SelectItem>
                 <SelectItem value="dependents">Dependents</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select
+              onValueChange={(value) => {
+                setSearching(true)
+                const newParams = new URLSearchParams(params.toString())
+                newParams.set('niDownloads', value)
+                window.history.pushState(null, '', `?${newParams.toString()}`)
+                form.setValue('niDownloads', value)
+                onSubmit(form.getValues())
+              }}
+              defaultValue={form.getValues().niDownloads}
+            >
+              <SelectTrigger className="w-36 rounded-none border-y-0 border-l border-r shadow-none ring-inset">
+                <SelectValue placeholder="> 0 Downloads" />
+              </SelectTrigger>
+              <SelectContent
+                className="rounded-none text-xs shadow-none"
+                align="start"
+              >
+                <SelectItem value="0">&gt; 0 Downloads</SelectItem>
+                <SelectItem value="10000">&gt; 10,000</SelectItem>
+                <SelectItem value="100000">&gt; 100,000</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -255,6 +289,13 @@ function Page() {
         {!searching && data?.objects?.length && (
           <div className="min-h-dvh divide-y">
             {data?.objects
+              .filter((item) => {
+                const niDownloads = Number(form.getValues().niDownloads)
+                if (form.getValues().sortBy === 'downloads_weekly') {
+                  return item.package.downloads.weekly > niDownloads
+                }
+                return item.package.downloads.monthly > niDownloads
+              })
               .sort((a, b) => {
                 if (form.getValues().niSort === 'downloads') {
                   if (form.getValues().sortBy === 'downloads_weekly') {
