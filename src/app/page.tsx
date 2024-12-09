@@ -101,6 +101,7 @@ function Page() {
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values)
     await mutation.mutateAsync(values)
   }
 
@@ -117,14 +118,14 @@ function Page() {
   })
 
   return (
-    <main className="mx-auto max-w-screen-lg px-3.5 py-5 md:px-10">
-      <h1 className="text-xl font-bold md:text-2xl">
+    <main className="mx-auto max-w-screen-lg px-3.5 pb-10 md:px-10">
+      <h1 className="mt-2 text-xl font-bold md:text-2xl">
         npmignore - npm on steroids
       </h1>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="mt-5 flex items-center">
+          <div className="mt-4 flex items-center">
             <FormField
               control={form.control}
               name="q"
@@ -156,7 +157,10 @@ function Page() {
             <button
               className="flex h-12 items-center justify-center rounded-none bg-zinc-950 px-8 text-sm font-semibold text-white"
               type="submit"
-              onClick={() => setSearching(true)}
+              onClick={() => {
+                setSearching(true)
+                onSubmit(form.getValues())
+              }}
             >
               Search
             </button>
