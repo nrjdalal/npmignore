@@ -2,7 +2,6 @@
 
 'use client'
 
-import { on } from 'events'
 import { npmSearch } from '@/actions/npm'
 import {
   Form,
