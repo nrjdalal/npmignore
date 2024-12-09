@@ -381,7 +381,7 @@ function Page() {
                     )}
                   </div>
 
-                  <div className="mr-5 mt-3 flex w-full flex-wrap items-center gap-y-2 text-sm text-zinc-500">
+                  <div className="mr-5 mt-3 flex w-full flex-wrap items-center gap-y-1 text-sm text-zinc-500">
                     <img
                       className="rounded-sm"
                       src={
