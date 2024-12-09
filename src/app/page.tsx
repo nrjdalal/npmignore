@@ -133,7 +133,7 @@ function Page() {
                   <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 transform text-gray-400" />
                   <FormControl>
                     <Input
-                      className="!m-0 h-12 rounded-none border-none bg-gray-200 pl-12 !text-base !text-zinc-600 shadow-none placeholder:text-gray-400 focus-visible:ring-inset"
+                      className="!m-0 h-12 rounded-none border-none bg-gray-100 pl-12 !text-base !text-zinc-600 shadow-none placeholder:text-gray-400 focus-visible:ring-inset"
                       {...field}
                       placeholder="Search packages"
                       onChange={(e) => {
