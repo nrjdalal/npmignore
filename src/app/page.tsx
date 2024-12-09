@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { ModeToggle } from '@/components/ui/theme-toggle'
 import { cn, humanNumbers } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -120,16 +121,20 @@ function Page() {
 
   return (
     <main className="mx-auto max-w-screen-lg px-3.5 pb-10 md:px-10">
-      <h1 className="mt-2 text-xl font-bold">
-        npmignore by{' '}
-        <Link
-          className="border-b border-gray-300"
-          href="https://rdt.li/x-nrjdalal"
-          target="_blank"
-        >
-          nrjdalal
-        </Link>
-      </h1>
+      <div className="mt-2 flex items-center justify-between">
+        <h1 className="text-xl font-bold">
+          npmignore by{' '}
+          <Link
+            className="border-b border-gray-300"
+            href="https://rdt.li/x-nrjdalal"
+            target="_blank"
+          >
+            nrjdalal
+          </Link>
+        </h1>
+
+        <ModeToggle />
+      </div>
 
       <Form {...form}>
         <form>
@@ -142,7 +147,7 @@ function Page() {
                   <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 transform text-gray-400" />
                   <FormControl>
                     <Input
-                      className="!m-0 h-12 rounded-none border-none bg-gray-100 pl-12 !text-base !text-zinc-600 shadow-none placeholder:text-gray-400 focus-visible:ring-inset"
+                      className="!m-0 h-12 rounded-none border-none bg-gray-100 pl-12 !text-base !text-zinc-600 shadow-none placeholder:text-gray-400 focus-visible:ring-inset dark:bg-zinc-900 dark:!text-white"
                       {...field}
                       placeholder="Search packages"
                       onChange={(e) => {
@@ -163,7 +168,7 @@ function Page() {
             />
 
             <button
-              className="flex h-12 items-center justify-center rounded-none bg-zinc-950 px-8 text-sm font-semibold text-white"
+              className="flex h-12 items-center justify-center rounded-none bg-zinc-950 px-8 text-sm font-semibold text-white dark:bg-zinc-800"
               type="submit"
               onClick={() => {
                 setSearching(true)
@@ -215,7 +220,7 @@ function Page() {
               }}
               defaultValue={form.getValues().sortBy}
             >
-              <SelectTrigger className="w-48 rounded-sm border-zinc-300 bg-gray-100 text-zinc-700">
+              <SelectTrigger className="w-48 rounded-sm border-zinc-300 bg-gray-100 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white">
                 <SelectValue placeholder="npm: Default" />
               </SelectTrigger>
               <SelectContent className="rounded-none shadow-none" align="end">
@@ -313,7 +318,7 @@ function Page() {
                 }
               })
               .map((item) => (
-                <div key={item.package.name} className="py-3">
+                <div key={item.package.name} className="overflow-x-hidden py-3">
                   <div className="flex flex-wrap items-center justify-between">
                     <Link
                       href={`https://npmjs.com/package/${item.package.name}`}
@@ -349,7 +354,7 @@ function Page() {
                     {item.package.keywords.slice(0, 14).map((keyword) => (
                       <span
                         key={keyword}
-                        className="rounded-md bg-gray-100 px-2 py-1 text-xs text-zinc-600"
+                        className="rounded-md bg-gray-100 px-2 py-1 text-xs text-zinc-600 dark:bg-zinc-800"
                       >
                         <Link
                           href={`/?q=keyword:${keyword}`}
