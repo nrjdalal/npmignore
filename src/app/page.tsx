@@ -112,7 +112,7 @@ function Page() {
   })
 
   return (
-    <main className="mx-auto max-w-screen-lg p-5 md:px-10">
+    <main className="mx-auto max-w-screen-lg px-3.5 py-5 md:px-10">
       <h1 className="text-2xl font-bold">npmignore - npm on steroids</h1>
 
       <Form {...form}>
@@ -171,7 +171,7 @@ function Page() {
         {!searching && data?.objects?.length && (
           <div className="min-h-dvh divide-y">
             <div className="mt-2 flex items-center justify-between py-5">
-              <p className="font-bold">{data.total} packages found</p>
+              <p className="font-bold">{data.total} pkgs found</p>
               <Select
                 onValueChange={(value) => {
                   setSearching(true)
@@ -213,7 +213,7 @@ function Page() {
             </div>
             {data?.objects.map((item) => (
               <div key={item.package.name} className="py-3">
-                <div>
+                <div className="flex flex-wrap items-center justify-between">
                   <Link
                     href={`https://npmjs.com/package/${item.package.name}`}
                     className="flex gap-x-4 font-semibold"
@@ -226,6 +226,14 @@ function Page() {
                       </span>
                     )}
                   </Link>
+                  <div className="flex items-center justify-end gap-x-1.5 text-sm">
+                    <Download className="size-4" />
+                    <span className="mt-px">
+                      {form.getValues().sortBy === 'downloads_weekly'
+                        ? humanNumbers(item.package.downloads.weekly)
+                        : humanNumbers(item.package.downloads.monthly)}
+                    </span>
+                  </div>
                 </div>
                 <p className="mt-1 text-sm text-zinc-500">
                   {item.package.description}
@@ -271,43 +279,30 @@ function Page() {
                     </Link>
                   )}
                 </div>
-                <div className="mt-3 flex items-center justify-between">
-                  <div className="flex items-center gap-x-2 text-zinc-500">
-                    <img
-                      className="rounded-sm"
-                      src={
-                        'https://npmjs.com/' +
-                        item.package.publisher.avatars.small
-                      }
-                      alt={item.package.name}
-                      height={24}
-                      width={24}
-                    />
-                    <p className="flex items-center text-sm">
-                      <Link
-                        href={`https://www.npmjs.com/~${item.package.publisher.name}`}
-                        target="_blank"
-                        className="font-semibold"
-                      >
-                        {item.package.publisher.name}
-                      </Link>
-                      <Dot />
-                      <span>{item.package.version}</span>
-                      <Dot />
-                      <Box className="mr-1 size-4" />
-                      <span>
-                        {humanNumbers(item.package.dependents)} dependents
-                      </span>
-                    </p>
-                  </div>
-                  <p className="flex items-center gap-x-1.5 text-sm">
-                    <Download className="size-4" />
-                    <span className="mt-px">
-                      {form.getValues().sortBy === 'downloads_weekly'
-                        ? humanNumbers(item.package.downloads.weekly)
-                        : humanNumbers(item.package.downloads.monthly)}
-                    </span>
-                  </p>
+
+                <div className="mr-5 mt-3 flex w-full flex-wrap items-center text-sm text-zinc-500">
+                  <img
+                    className="rounded-sm"
+                    src={
+                      'https://npmjs.com/' +
+                      item.package.publisher.avatars.small
+                    }
+                    alt={item.package.name}
+                    height={24}
+                    width={24}
+                  />
+                  <Link
+                    className="ml-2 font-bold"
+                    href={`https://www.npmjs.com/~${item.package.publisher.name}`}
+                    target="_blank"
+                  >
+                    {item.package.publisher.name}
+                  </Link>
+                  <Dot />
+                  <span>{item.package.version}</span>
+                  <Dot />
+                  <Box className="mr-1 size-4 min-w-4" />
+                  <p>{humanNumbers(item.package.dependents)} dependents</p>
                 </div>
               </div>
             ))}
