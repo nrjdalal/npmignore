@@ -175,93 +175,84 @@ function Page() {
             <p className="mt-24">Something went wrong!</p>
           </div>
         )}
+        {!searching && data?.objects?.length === 0 && (
+          <div className="flex h-48 min-h-dvh justify-center">
+            <p className="mt-24">No packages found</p>
+          </div>
+        )}
+
+        <div>
+          <div className="mt-2 flex items-center justify-between py-5">
+            <p className="font-bold">{data?.total || '0'} pkgs found</p>
+            <Select
+              onValueChange={(value) => {
+                setSearching(true)
+                const newParams = new URLSearchParams(params.toString())
+                newParams.set('sortBy', value)
+                window.history.pushState(null, '', `?${newParams.toString()}`)
+                form.setValue(
+                  'sortBy',
+                  value as
+                    | 'score'
+                    | 'downloads_weekly'
+                    | 'downloads_monthly'
+                    | 'dependent_count'
+                    | 'published_at',
+                )
+                onSubmit(form.getValues())
+              }}
+              defaultValue={form.getValues().sortBy}
+            >
+              <SelectTrigger className="w-48 rounded-sm border-zinc-300 bg-gray-100 text-zinc-700">
+                <SelectValue placeholder="npm: Default" />
+              </SelectTrigger>
+              <SelectContent className="rounded-none shadow-none" align="end">
+                <SelectItem value="score">npm: Default</SelectItem>
+                <SelectItem value="downloads_weekly">
+                  Weekly Downloads
+                </SelectItem>
+                <SelectItem value="downloads_monthly">
+                  Monthly Downloads
+                </SelectItem>
+                <SelectItem value="dependent_count">Most Dependents</SelectItem>
+                <SelectItem value="published_at">Recently Published</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex items-center space-x-2 border-y">
+            <p className="font-semibold">ni filters</p>
+            <Select
+              onValueChange={(value) => {
+                setSearching(true)
+                const newParams = new URLSearchParams(params.toString())
+                newParams.set('niSort', value)
+                window.history.pushState(null, '', `?${newParams.toString()}`)
+                form.setValue(
+                  'niSort',
+                  value as 'disabled' | 'downloads' | 'dependents',
+                )
+                onSubmit(form.getValues())
+              }}
+              defaultValue={form.getValues().niSort}
+            >
+              <SelectTrigger className="w-36 rounded-none border-x border-y-0 shadow-none">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent
+                className="rounded-none text-xs shadow-none"
+                align="center"
+              >
+                <SelectItem value="disabled">Sort: Disabled</SelectItem>
+                <SelectItem value="downloads">Downloads</SelectItem>
+                <SelectItem value="dependents">Dependents</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
         {!searching && data?.objects?.length && (
           <div className="min-h-dvh divide-y">
-            {/* npm filters */}
-            <div>
-              <div className="mt-2 flex items-center justify-between py-5">
-                <p className="font-bold">{data.total} pkgs found</p>
-                <Select
-                  onValueChange={(value) => {
-                    setSearching(true)
-                    const newParams = new URLSearchParams(params.toString())
-                    newParams.set('sortBy', value)
-                    window.history.pushState(
-                      null,
-                      '',
-                      `?${newParams.toString()}`,
-                    )
-                    form.setValue(
-                      'sortBy',
-                      value as
-                        | 'score'
-                        | 'downloads_weekly'
-                        | 'downloads_monthly'
-                        | 'dependent_count'
-                        | 'published_at',
-                    )
-                    onSubmit(form.getValues())
-                  }}
-                  defaultValue={form.getValues().sortBy}
-                >
-                  <SelectTrigger className="w-48 rounded-sm border-zinc-300 bg-gray-100 text-zinc-700">
-                    <SelectValue placeholder="npm: Default" />
-                  </SelectTrigger>
-                  <SelectContent
-                    className="rounded-none shadow-none"
-                    align="end"
-                  >
-                    <SelectItem value="score">npm: Default</SelectItem>
-                    <SelectItem value="downloads_weekly">
-                      Weekly Downloads
-                    </SelectItem>
-                    <SelectItem value="downloads_monthly">
-                      Monthly Downloads
-                    </SelectItem>
-                    <SelectItem value="dependent_count">
-                      Most Dependents
-                    </SelectItem>
-                    <SelectItem value="published_at">
-                      Recently Published
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* custom filter */}
-            <div className="flex items-center space-x-2">
-              <p className="font-semibold">ni filters</p>
-              <Select
-                onValueChange={(value) => {
-                  setSearching(true)
-                  const newParams = new URLSearchParams(params.toString())
-                  newParams.set('niSort', value)
-                  window.history.pushState(null, '', `?${newParams.toString()}`)
-                  form.setValue(
-                    'niSort',
-                    value as 'disabled' | 'downloads' | 'dependents',
-                  )
-                  onSubmit(form.getValues())
-                }}
-                defaultValue={form.getValues().niSort}
-              >
-                <SelectTrigger className="w-36 rounded-none border-x border-y-0 shadow-none">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent
-                  className="rounded-none text-xs shadow-none"
-                  align="center"
-                >
-                  <SelectItem value="disabled text-xs">
-                    Sort: Disabled
-                  </SelectItem>
-                  <SelectItem value="downloads">Downloads</SelectItem>
-                  <SelectItem value="dependents">Dependents</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
             {data?.objects
               .sort((a, b) => {
                 if (form.getValues().niSort === 'downloads') {
