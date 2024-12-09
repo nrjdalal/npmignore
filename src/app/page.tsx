@@ -122,17 +122,7 @@ function Page() {
   return (
     <main className="mx-auto max-w-screen-lg px-3.5 pb-10 md:px-10">
       <div className="mt-2 flex items-center justify-between">
-        <h1 className="text-xl font-bold">
-          npmignore by{' '}
-          <Link
-            className="border-b border-gray-300"
-            href="https://rdt.li/x-nrjdalal"
-            target="_blank"
-          >
-            nrjdalal
-          </Link>
-        </h1>
-
+        <h1 className="text-xl font-bold">npmignore</h1>
         <ModeToggle />
       </div>
 
@@ -419,6 +409,28 @@ function Page() {
               ))}
           </div>
         )}
+      </div>
+
+      <div className="mt-5 text-center text-sm text-muted-foreground">
+        <p className="flex justify-center">
+          <Link
+            className="mb-2 text-base font-semibold text-zinc-700 underline dark:text-zinc-200"
+            href="https://github.com/nrjdalal/npmignore"
+          >
+            Github
+          </Link>
+          <Dot />
+          <Link
+            className="mb-2 text-base font-semibold text-zinc-700 underline dark:text-zinc-200"
+            href="https://nrjdalal.com"
+          >
+            nrjdalal.com
+          </Link>
+        </p>
+        <br />
+        UI Color Tweaks, Pagination, More Filters!
+        <br />
+        Coming Soon!
       </div>
     </main>
   )
