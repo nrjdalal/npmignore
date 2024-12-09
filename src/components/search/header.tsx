@@ -1,3 +1,11 @@
+import Link from 'next/link'
+
 export default function Header() {
-  return <h1 className="py-4 text-xl font-bold">npmignore</h1>
+  return (
+    <nav className="py-4">
+      <Link href="/" className="text-2xl font-black">
+        npmignore
+      </Link>
+    </nav>
+  )
 }

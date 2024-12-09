@@ -55,21 +55,17 @@ interface NpmSearchResult {
   }[]
 }
 export async function npmSearch({
-  q,
-  page,
-  perPage,
-  sortBy,
+  q = 'shadcn',
+  page = 0,
+  perPage = 100,
+  sortBy = 'score',
 }: NpmSearch = {}): Promise<NpmSearchResult> {
   const queryParams = new URLSearchParams({
-    q: q || 'next',
-    page: page?.toString() || '0',
-    perPage: perPage?.toString() || '100',
-    sortBy: sortBy || 'score',
+    q: q,
+    page: page.toString(),
+    perPage: perPage.toString(),
+    sortBy: sortBy,
   }).toString()
-
-  if (!q) {
-    throw new Error('Query is required')
-  }
 
   const res = await fetch(`https://www.npmjs.com/search?${queryParams}`, {
     method: 'GET',

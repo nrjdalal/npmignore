@@ -6,7 +6,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="mx-auto max-w-screen-lg px-3.5 md:px-10">
+    <div className="mx-auto max-w-screen-lg overflow-x-hidden px-3.5 md:px-10">
       <Header />
       {children}
     </div>

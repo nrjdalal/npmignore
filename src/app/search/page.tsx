@@ -1,9 +1,15 @@
-import SearchForm from '@/components/search/searchbar.client'
+import SearchBar from '@/components/search/bar.client'
+import SearchResults from '@/components/search/results'
 
-export default function SearchBar() {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+
+export default async function Page(props: { searchParams: SearchParams }) {
+  const searchParams = await props.searchParams
+
   return (
     <main>
-      <SearchForm />
+      <SearchBar />
+      <SearchResults searchParams={searchParams} />
     </main>
   )
 }
