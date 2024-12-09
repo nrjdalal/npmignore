@@ -22,7 +22,7 @@ import {
 import { humanNumbers } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Download, Loader2, Search } from 'lucide-react'
+import { Box, Dot, Download, Loader2, Search } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useState } from 'react'
@@ -75,7 +75,7 @@ function Page() {
           | 'downloads_weekly'
           | 'downloads_monthly'
           | 'dependent_count'
-          | 'published_at') || 'score',
+          | 'published_at') || '',
     },
   })
 
@@ -177,7 +177,6 @@ function Page() {
                   setSearching(true)
                   const newParams = new URLSearchParams(params.toString())
                   newParams.set('sortBy', value)
-                  newParams.set('page', '0')
                   window.history.pushState(null, '', `?${newParams.toString()}`)
                   form.setValue(
                     'sortBy',
@@ -215,19 +214,23 @@ function Page() {
             {data?.objects.map((item) => (
               <div key={item.package.name} className="py-3">
                 <div>
-                  <h3 className="flex gap-x-4 font-semibold">
+                  <Link
+                    href={`https://npmjs.com/package/${item.package.name}`}
+                    className="flex gap-x-4 font-semibold"
+                    target="_blank"
+                  >
                     {item.package.name}
                     {params.get('q') === item.package.name && (
                       <span className="flex items-center rounded-md bg-purple-200 px-2 text-xs font-normal text-zinc-600">
                         exact match
                       </span>
                     )}
-                  </h3>
+                  </Link>
                 </div>
                 <p className="mt-1 text-sm text-zinc-500">
                   {item.package.description}
                 </p>
-                {/* keywords */}
+
                 <div className="mt-2 flex flex-wrap gap-2">
                   {item.package.keywords.map((keyword) => (
                     <span
@@ -243,13 +246,13 @@ function Page() {
                             params.toString(),
                           )
                           newParams.set('q', `keyword:${keyword}`)
-                          newParams.set('page', '0')
                           window.history.pushState(
                             null,
                             '',
                             `?${newParams.toString()}`,
                           )
                           form.setValue('q', `keyword:${keyword}`)
+                          form.setValue('page', 0)
                           onSubmit(form.getValues())
                         }}
                       >
@@ -259,11 +262,7 @@ function Page() {
                   ))}
                 </div>
                 <div className="mt-3 flex items-center justify-between">
-                  <Link
-                    className="flex items-center gap-x-2 text-zinc-500"
-                    href={`https://www.npmjs.com/~${item.package.publisher.name}`}
-                    target="_blank"
-                  >
+                  <div className="flex items-center gap-x-2 text-zinc-500">
                     <img
                       className="rounded-sm"
                       src={
@@ -274,14 +273,29 @@ function Page() {
                       height={24}
                       width={24}
                     />
-                    <p className="text-sm font-semibold">
-                      {item.package.publisher.name}
+                    <p className="flex items-center text-sm">
+                      <Link
+                        href={`https://www.npmjs.com/~${item.package.publisher.name}`}
+                        target="_blank"
+                        className="font-semibold"
+                      >
+                        {item.package.publisher.name}
+                      </Link>
+                      <Dot />
+                      <span>{item.package.version}</span>
+                      <Dot />
+                      <Box className="mr-1 size-4" />
+                      <span>
+                        {humanNumbers(item.package.dependents)} dependents
+                      </span>
                     </p>
-                  </Link>
+                  </div>
                   <p className="flex items-center gap-x-1.5 text-sm">
                     <Download className="size-4" />
                     <span className="mt-px">
-                      {humanNumbers(item.package.downloads.monthly)}
+                      {form.getValues().sortBy === 'downloads_weekly'
+                        ? humanNumbers(item.package.downloads.weekly)
+                        : humanNumbers(item.package.downloads.monthly)}
                     </span>
                   </p>
                 </div>
