@@ -381,7 +381,7 @@ function Page() {
                     )}
                   </div>
 
-                  <div className="mr-5 mt-3 flex w-full flex-wrap items-center text-sm text-zinc-500">
+                  <div className="mr-5 mt-3 flex w-full flex-wrap items-center gap-y-2 text-sm text-zinc-500">
                     <img
                       className="rounded-sm"
                       src={
@@ -403,8 +403,8 @@ function Page() {
                     <span>{item.package.version}</span>
                     <Dot />
                     <span>{humanTime(item.package.date.ts)}</span>
-                    <Dot />
                     <p className="flex items-center">
+                      <Dot />
                       <Box className="mr-1 size-4 min-w-4" />
                       <span>
                         {humanNumbers(item.package.dependents)} dependents
