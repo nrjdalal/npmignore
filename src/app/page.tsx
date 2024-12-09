@@ -404,8 +404,12 @@ function Page() {
                     <Dot />
                     <span>{humanTime(item.package.date.ts)}</span>
                     <Dot />
-                    <Box className="mr-1 size-4 min-w-4" />
-                    <p>{humanNumbers(item.package.dependents)} dependents</p>
+                    <p className="flex items-center">
+                      <Box className="mr-1 size-4 min-w-4" />
+                      <span>
+                        {humanNumbers(item.package.dependents)} dependents
+                      </span>
+                    </p>
                   </div>
                 </div>
               ))}
