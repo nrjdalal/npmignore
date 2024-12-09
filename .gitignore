@@ -41,3 +41,4 @@ next-env.d.ts
 
 # custom
 .dev/
+yarn.lock
