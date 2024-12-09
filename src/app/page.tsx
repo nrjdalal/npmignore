@@ -122,7 +122,9 @@ function Page() {
   return (
     <main className="mx-auto max-w-screen-lg px-3.5 pb-10 md:px-10">
       <div className="mt-2 flex items-center justify-between">
-        <h1 className="text-xl font-bold">npmignore</h1>
+        <Link href={'/search'} className="text-xl font-bold">
+          npmignore
+        </Link>
         <ModeToggle />
       </div>
 
