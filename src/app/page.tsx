@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { humanNumbers } from '@/lib/utils'
+import { cn, humanNumbers } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Box, Dot, Download, Loader2, Search } from 'lucide-react'
@@ -119,9 +119,7 @@ function Page() {
 
   return (
     <main className="mx-auto max-w-screen-lg px-3.5 pb-10 md:px-10">
-      <h1 className="mt-2 text-xl font-bold md:text-2xl">
-        npmignore - npm on steroids
-      </h1>
+      <h1 className="mt-2 text-xl font-bold">npmignore - npm on steroids</h1>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -302,7 +300,12 @@ function Page() {
                     {item.package.description}
                   </p>
 
-                  <div className="mt-2 flex flex-wrap gap-2">
+                  <div
+                    className={cn(
+                      'mt-2 flex flex-wrap gap-2',
+                      !item.package.keywords.length && 'hidden',
+                    )}
+                  >
                     {item.package.keywords.slice(0, 14).map((keyword) => (
                       <span
                         key={keyword}
