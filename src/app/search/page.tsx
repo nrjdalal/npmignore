@@ -1,5 +1,5 @@
 import SearchBar from '@/components/search/bar.client'
-import SearchResults from '@/components/search/results'
+import SeacrhResultsIndex from '@/components/search/results/index'
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 
@@ -9,7 +9,7 @@ export default async function Page(props: { searchParams: SearchParams }) {
   return (
     <main>
       <SearchBar />
-      <SearchResults searchParams={searchParams} />
+      <SeacrhResultsIndex searchParams={searchParams} />
     </main>
   )
 }
