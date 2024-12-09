@@ -89,7 +89,7 @@ function Page() {
       return await npmSearch({
         ...values,
         page: values.page - 1,
-        q: values.q ? values.q : 'next',
+        q: values.q ? values.q : 'shadcn',
         sortBy: values.sortBy ? values.sortBy : 'score',
       })
     },
@@ -112,7 +112,7 @@ function Page() {
       return await npmSearch({
         ...(form.getValues() as z.infer<typeof formSchema>),
         page: form.getValues().page - 1,
-        q: form.getValues().q ? form.getValues().q : 'next',
+        q: form.getValues().q ? form.getValues().q : 'shadcn',
         sortBy: form.getValues().sortBy ? form.getValues().sortBy : 'score',
       })
     },
