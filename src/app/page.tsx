@@ -393,7 +393,7 @@ function Page() {
                         'https://npmjs.com/' +
                         item.package.publisher.avatars.small
                       }
-                      alt={item.package.name}
+                      alt={''}
                       height={24}
                       width={24}
                     />
