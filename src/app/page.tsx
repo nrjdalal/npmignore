@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ModeToggle } from '@/components/ui/theme-toggle'
-import { cn, humanNumbers } from '@/lib/utils'
+import { cn, humanNumbers, humanTime } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Box, Dot, Download, Loader2, Search } from 'lucide-react'
@@ -401,6 +401,8 @@ function Page() {
                     </Link>
                     <Dot />
                     <span>{item.package.version}</span>
+                    <Dot />
+                    <span>{humanTime(item.package.date.ts)}</span>
                     <Dot />
                     <Box className="mr-1 size-4 min-w-4" />
                     <p>{humanNumbers(item.package.dependents)} dependents</p>
