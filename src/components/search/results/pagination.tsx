@@ -29,14 +29,13 @@ export default function Paginantion() {
   })
 
   const info = {
-    total: searchResults.total,
+    total: searchResults.total > 4999 ? 5000 : searchResults.total,
     page: searchParams.page || DefaultSearchParams.page,
     perPage: searchParams.perPage || DefaultSearchParams.perPage,
-    lastPage:
-      Math.ceil(
-        searchResults.total /
-          (searchParams.perPage || DefaultSearchParams.perPage),
-      ) - 1,
+    lastPage: Math.ceil(
+      (searchResults.total > 4999 ? 5000 : searchResults.total) /
+        (searchParams.perPage || DefaultSearchParams.perPage),
+    ),
   }
 
   const data = {
@@ -82,7 +81,7 @@ export default function Paginantion() {
                 mutation.mutateAsync()
               }}
             >
-              {index + 1}
+              {index}
             </button>
           ))}
           <span className="hidden sm:inline">...</span>
@@ -102,7 +101,7 @@ export default function Paginantion() {
                 mutation.mutateAsync()
               }}
             >
-              {info.lastPage - 2 + index + 1}
+              {info.lastPage - 2 + index}
             </button>
           ))}
         </>
