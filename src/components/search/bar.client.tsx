@@ -67,6 +67,7 @@ export default function SearchBar({
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (searchParams.q === values.q) return
     if (searching) return
     setSearchParams({
       ...searchParams,
@@ -76,10 +77,10 @@ export default function SearchBar({
   }
 
   useEffect(() => {
-    Object.entries(searchParams).forEach(([key, value]) => {
-      form.setValue(key as 'q' | 'page' | 'perPage', value as string | number)
-    })
-
+    if (!searchParams.q) return
+    if (searchParams.q?.startsWith('keyword:')) {
+      form.setValue('q', searchParams.q)
+    }
     const params = new URLSearchParams(
       Object.entries(searchParams).reduce(
         (acc, [key, value]) => {
@@ -89,13 +90,12 @@ export default function SearchBar({
         {} as Record<string, string>,
       ),
     )
-
     window.history.pushState(
       {},
       '',
       `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
     )
-  }, [searchParams, form])
+  }, [form, searchParams])
 
   return (
     <Form {...form}>
@@ -112,13 +112,6 @@ export default function SearchBar({
                     className="h-12 rounded-none border-none bg-foreground font-mono ring-inset sm:pl-12"
                     placeholder="Search packages"
                     {...field}
-                    onChange={(e) => {
-                      field.onChange(e)
-                      setSearchParams({
-                        ...searchParams,
-                        q: e.target.value,
-                      })
-                    }}
                   />
                 </FormControl>
                 <FormMessage />
