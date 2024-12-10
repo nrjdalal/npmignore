@@ -67,6 +67,7 @@ export default function SearchBar({
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (searchParams.q === values.q) return
     if (searching) return
     setSearchParams({
       ...searchParams,
