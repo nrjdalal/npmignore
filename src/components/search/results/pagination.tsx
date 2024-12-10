@@ -32,7 +32,7 @@ export default function Paginantion() {
     total: searchResults.total > 4999 ? 5000 : searchResults.total,
     page: searchParams.page || DefaultSearchParams.page,
     perPage: searchParams.perPage || DefaultSearchParams.perPage,
-    lastPage: Math.ceil(
+    lastPage: Math.floor(
       (searchResults.total > 4999 ? 5000 : searchResults.total) /
         (searchParams.perPage || DefaultSearchParams.perPage),
     ),
@@ -44,7 +44,7 @@ export default function Paginantion() {
   }
 
   return (
-    <div className="flex space-x-2 pt-8">
+    <div className={cn('flex space-x-2 pt-8', info.lastPage <= 1 && 'hidden')}>
       <button
         className={cn(
           'rounded bg-primary px-4 py-1 text-sm text-background',
