@@ -9,7 +9,13 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Searching, SearchParams, SearchResults } from '@/lib/store'
+import {
+  DefaultSearchParams,
+  DefaultSearchResults,
+  Searching,
+  SearchParams,
+  SearchResults,
+} from '@/lib/store'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -26,14 +32,14 @@ const formSchema = z.object({
   }),
   page: z.coerce.number().int().nonnegative(),
   perPage: z.coerce.number().int().min(1).max(100),
+  sortBy: z.enum([
+    'score',
+    'downloads_weekly',
+    'downloads_monthly',
+    'dependent_count',
+    'published_at',
+  ]),
 })
-
-const DEFAULT_SEARCH_PARAMS = {
-  q: '',
-  page: 0,
-  perPage: 100,
-  sortby: 'score',
-}
 
 export default function SearchBar({
   initialSearchParams,
@@ -51,24 +57,15 @@ export default function SearchBar({
     queryFn: async () => {
       // home page
       if (window.location.pathname === '/') return true
-      // no search query
-      if (window.location.search === '') {
-        setSearchResults({
-          formData: {
-            search: {
-              q: { value: '' },
-              page: { value: 0 },
-              perPage: { value: 0 },
-              sortBy: { value: 'score' },
-            },
-          },
-          total: 0,
-          objects: [],
-        })
-        return true
-      }
       // no reload on revisits
       if (initialSearchParams?.q === searchParams?.q) return true
+      // loading
+      setSearchResults(DefaultSearchResults)
+      // no search params
+      if (window.location.search === '') {
+        setSearchResults({ ...DefaultSearchResults, total: 0 })
+        return true
+      }
       setSearching(true)
       setSearchParams(initialSearchParams)
       setSearchResults(await npmSearch(initialSearchParams))
@@ -80,15 +77,15 @@ export default function SearchBar({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      q: searchParams?.q || DEFAULT_SEARCH_PARAMS.q,
-      page: Number(searchParams?.page) || DEFAULT_SEARCH_PARAMS.page,
-      perPage: Number(searchParams?.perPage) || DEFAULT_SEARCH_PARAMS.perPage,
+      q: searchParams?.q || DefaultSearchParams.q,
+      page: Number(searchParams?.page || DefaultSearchParams.page),
+      perPage: Number(searchParams?.perPage || DefaultSearchParams.perPage),
+      sortBy: searchParams?.sortBy || DefaultSearchParams.sortBy,
     },
   })
 
   const mutation = useMutation({
     mutationFn: async () => {
-      console.log('mutation', searchResult?.formData?.search?.q?.value)
       if (initialSearchParams?.q === searchResult?.formData?.search?.q?.value)
         setSearching(true)
       setSearchResults(await npmSearch(searchParams))
@@ -109,7 +106,7 @@ export default function SearchBar({
       ...searchParams,
       ...values,
     })
-    form.setValue('q', DEFAULT_SEARCH_PARAMS.q)
+    form.setValue('q', DefaultSearchParams.q || '')
     await mutation.mutateAsync()
   }
 
@@ -121,7 +118,7 @@ export default function SearchBar({
           acc[key] = String(value)
           if (
             value ===
-            DEFAULT_SEARCH_PARAMS[key as keyof typeof DEFAULT_SEARCH_PARAMS]
+            DefaultSearchParams[key as keyof typeof DefaultSearchParams]
           ) {
             delete acc[key]
           }

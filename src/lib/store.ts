@@ -13,22 +13,34 @@ interface SearchParamsType {
     | 'published_at'
 }
 
-export const SearchParams = atom<SearchParamsType>({
+export const DefaultSearchParams: SearchParamsType = {
   q: '',
   page: 0,
   perPage: 100,
   sortBy: 'score',
-})
+}
+
+export const SearchParams = atom<SearchParamsType>(DefaultSearchParams)
 export const Searching = atom<boolean>(false)
-export const SearchResults = atom<NpmSearchResult>({
+
+export const DefaultSearchResults = {
   formData: {
     search: {
       q: { value: '' },
       page: { value: 0 },
       perPage: { value: 0 },
-      sortBy: { value: 'score' },
+      sortBy: {
+        value: 'score' as
+          | 'score'
+          | 'downloads_weekly'
+          | 'downloads_monthly'
+          | 'dependent_count'
+          | 'published_at',
+      },
     },
   },
   total: -1,
   objects: [],
-})
+}
+
+export const SearchResults = atom<NpmSearchResult>(DefaultSearchResults)
