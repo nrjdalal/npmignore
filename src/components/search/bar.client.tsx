@@ -21,7 +21,7 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 const formSchema = z.object({
-  q: z.string().min(2, {
+  q: z.string().min(1, {
     message: 'Search must be at least 1 character.',
   }),
   page: z.coerce.number().int().nonnegative(),
@@ -31,7 +31,7 @@ const formSchema = z.object({
 export default function SearchBar() {
   const { q, page, perPage } = Object.fromEntries(useSearchParams())
 
-  const [searchParams] = useAtom(SearchParams)
+  const [searchParams, setSearchParamState] = useAtom(SearchParams)
   const [searching, setSearching] = useAtom(Searching)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -68,7 +68,7 @@ export default function SearchBar() {
     Object.entries(searchParams).forEach(([key, value]) => {
       form.setValue(key as 'q' | 'page' | 'perPage', value as string | number)
     })
-  }, [form, searchParams])
+  }, [searchParams])
 
   return (
     <Form {...form}>
@@ -87,6 +87,7 @@ export default function SearchBar() {
                     placeholder="Search packages"
                     {...field}
                     onChange={(e) => {
+                      setSearchParamState({ q: e.target.value })
                       field.onChange(e)
                       const params = new URLSearchParams(window.location.search)
                       params.set('q', e.target.value)

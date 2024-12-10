@@ -60,10 +60,11 @@ export default function Content({
           >
             <button
               onClick={() => {
-                if (searching || searchParamsState.q === `keyword:${keyword}`)
+                if (searching || searchParamsState.q === `keyword:${keyword}`) {
                   return
-                setSearching(true)
+                }
                 setSearchParamState({ q: `keyword:${keyword}` })
+                setSearching(true)
                 mutation.mutate(keyword)
                 const params = new URLSearchParams(window.location.search)
                 params.set('q', `keyword:${keyword}`)
