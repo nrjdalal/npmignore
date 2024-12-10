@@ -28,6 +28,12 @@ const formSchema = z.object({
   perPage: z.coerce.number().int().min(1).max(100),
 })
 
+const DEFAULT_SEARCH_PARAMS = {
+  q: '',
+  page: 0,
+  perPage: 100,
+}
+
 export default function SearchBar({
   initialSearchParams,
 }: {
@@ -40,8 +46,11 @@ export default function SearchBar({
   useQuery({
     queryKey: ['search'],
     queryFn: async () => {
+      setSearching(true)
+      setSearchResults({ total: 0, objects: [] })
       setSearchParams(initialSearchParams)
       setSearchResults(await npmSearch(initialSearchParams))
+      setSearching(false)
       return true
     },
   })
@@ -49,9 +58,9 @@ export default function SearchBar({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      q: searchParams.q || '',
-      page: Number(searchParams.page) || 0,
-      perPage: Number(searchParams.perPage) || 100,
+      q: searchParams.q || DEFAULT_SEARCH_PARAMS.q,
+      page: Number(searchParams.page) || DEFAULT_SEARCH_PARAMS.page,
+      perPage: Number(searchParams.perPage) || DEFAULT_SEARCH_PARAMS.perPage,
     },
   })
 
@@ -76,18 +85,22 @@ export default function SearchBar({
       ...searchParams,
       ...values,
     })
+    form.setValue('q', DEFAULT_SEARCH_PARAMS.q)
     await mutation.mutateAsync()
   }
 
   useEffect(() => {
     if (!searchParams.q) return
-    if (searchParams.q?.startsWith('keyword:')) {
-      form.setValue('q', searchParams.q)
-    }
     const params = new URLSearchParams(
       Object.entries(searchParams).reduce(
         (acc, [key, value]) => {
           acc[key] = String(value)
+          if (
+            value ===
+            DEFAULT_SEARCH_PARAMS[key as keyof typeof DEFAULT_SEARCH_PARAMS]
+          ) {
+            delete acc[key]
+          }
           return acc
         },
         {} as Record<string, string>,
@@ -98,7 +111,7 @@ export default function SearchBar({
       '',
       `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
     )
-  }, [form, searchParams])
+  }, [searchParams])
 
   return (
     <Form {...form}>
@@ -113,7 +126,7 @@ export default function SearchBar({
                 <FormControl>
                   <Input
                     className="h-12 rounded-none border-none bg-foreground font-mono ring-inset sm:pl-12"
-                    placeholder="Search packages"
+                    placeholder={searchParams.q || 'Search packages'}
                     {...field}
                   />
                 </FormControl>
