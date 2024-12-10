@@ -93,7 +93,7 @@ export default function SearchBar() {
                       window.history.replaceState(
                         {},
                         '',
-                        `${window.location.pathname}?${params}`,
+                        `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
                       )
                     }}
                   />

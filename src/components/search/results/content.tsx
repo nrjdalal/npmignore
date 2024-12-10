@@ -58,7 +58,7 @@ export default function Content({
           >
             <button
               onClick={() => {
-                if (searching) return
+                if (searching || searchParams.q === `keyword:${keyword}`) return
                 setSearching(true)
                 setSearchParamState({ q: `keyword:${keyword}` })
                 mutation.mutate(keyword)
@@ -67,7 +67,7 @@ export default function Content({
                 window.history.replaceState(
                   {},
                   '',
-                  `${window.location.pathname}?${params}`,
+                  `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
                 )
               }}
             >
