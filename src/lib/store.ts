@@ -1,4 +1,4 @@
-import { atomWithStorage } from 'jotai/utils'
+import { atom } from 'jotai'
 
-export const Searching = atomWithStorage('searching', false)
-export const StoredResults = atomWithStorage('storedResults', [])
+export const Searching = atom(false)
+export const StoredResults = atom([])

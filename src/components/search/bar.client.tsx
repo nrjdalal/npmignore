@@ -48,7 +48,7 @@ export default function SearchBar() {
       return { results: await npmSearch(values), values }
     },
     onSuccess: (data) => {
-      setSearching(!searching)
+      setSearching(false)
       queryClient.setQueryData(['search'], data.results)
     },
     onError: (error) => {
@@ -57,7 +57,8 @@ export default function SearchBar() {
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setSearching(!searching)
+    if (searching) return
+    setSearching(true)
     await mutation.mutateAsync(values)
   }
 

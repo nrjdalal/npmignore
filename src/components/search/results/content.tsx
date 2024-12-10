@@ -30,7 +30,7 @@ export default function Content({
       })
     },
     onSuccess: (data) => {
-      setSearching(!searching)
+      setSearching(false)
       queryClient.setQueryData(['search'], data)
     },
     onError: (error) => {
@@ -50,11 +50,15 @@ export default function Content({
         {keywords.slice(0, 14).map((keyword) => (
           <span
             key={keyword}
-            className="rounded-md bg-gray-100 px-2 py-1 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+            className={cn(
+              'rounded-md bg-gray-100 px-2 py-1 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400',
+              searching && 'cursor-not-allowed',
+            )}
           >
             <button
               onClick={() => {
-                setSearching(!searching)
+                if (searching) return
+                setSearching(true)
                 mutation.mutate(keyword)
                 const params = new URLSearchParams(window.location.search)
                 params.set('q', `keyword:${keyword}`)
