@@ -1,7 +1,7 @@
 'use client'
 
 import { npmSearch } from '@/actions/npm'
-import { Searching } from '@/lib/store'
+import { Searching, SearchParams } from '@/lib/store'
 import { cn } from '@/lib/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
@@ -19,19 +19,23 @@ export default function Content({
   keywords: string[]
 }) {
   const [searching, setSearching] = useAtom(Searching)
+  const [searchParamsState, setSearchParamState] = useAtom<{ q?: string }>(
+    SearchParams,
+  )
 
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
     mutationFn: async (keyword: string) => {
+      setSearching(true)
       return await npmSearch({
         ...searchParams,
         q: `keyword:${keyword}`,
       })
     },
     onSuccess: (data) => {
-      setSearching(false)
       queryClient.setQueryData(['search'], data)
+      setSearching(false)
     },
     onError: (error) => {
       console.error(error)
@@ -57,16 +61,14 @@ export default function Content({
           >
             <button
               onClick={() => {
-                if (searching) return
-                setSearching(true)
+                if (searching || searchParamsState.q === `keyword:${keyword}`) {
+                  return
+                }
+                setSearchParamState({
+                  ...searchParams,
+                  q: `keyword:${keyword}`,
+                })
                 mutation.mutate(keyword)
-                const params = new URLSearchParams(window.location.search)
-                params.set('q', `keyword:${keyword}`)
-                window.history.replaceState(
-                  {},
-                  '',
-                  `${window.location.pathname}?${params}`,
-                )
               }}
             >
               {keyword}
