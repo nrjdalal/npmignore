@@ -3,12 +3,16 @@ import SeacrhResultsIndex from '@/components/search/results/index'
 
 type SearchParams = Promise<{ [key: string]: string }>
 
-export default async function Page(props: { searchParams: SearchParams }) {
-  const searchParams = await props.searchParams
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: SearchParams
+}) {
+  const resolvedSearchParams = await searchParams
 
   return (
     <main>
-      <SearchBar initialSearchParams={searchParams} />
+      <SearchBar initialSearchParams={resolvedSearchParams} />
       <SeacrhResultsIndex />
     </main>
   )
