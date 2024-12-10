@@ -40,7 +40,7 @@ export default function Content({
 
   return (
     <div className="space-y-2">
-      <p className="mt-1 text-sm text-zinc-500">{description}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{description}</p>
       <div
         className={cn(
           'mt-2 flex flex-wrap gap-2',
@@ -51,7 +51,7 @@ export default function Content({
           <span
             key={keyword}
             className={cn(
-              'rounded-md bg-gray-100 px-2 py-1 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400',
+              'rounded-md bg-accent px-2 py-1 text-xs text-accent-foreground',
               searching && 'cursor-not-allowed',
             )}
           >
@@ -76,7 +76,7 @@ export default function Content({
         {keywords.length > 13 && (
           <Link
             href={'https://www.npmjs.com/package/' + name}
-            className="rounded-md bg-gray-100 px-2 py-1 text-xs text-zinc-600"
+            className="rounded-md bg-accent px-2 py-1 text-xs text-accent-foreground"
             target="_blank"
           >
             View {keywords.length - 13} more

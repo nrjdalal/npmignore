@@ -53,6 +53,7 @@ https://github.com/tailwindlabs/tailwindcss/blob/next/packages/tailwindcss/theme
     --theme-secondary-foreground: var(--color-gray-800);
     --theme-tertiary: var(--color-gray-400);
     --theme-tertiary-foreground: var(--color-gray-900);
+    --theme-accent: var(--color-gray-200);
 
     --theme-apex-dark: var(--color-gray-800);
     --theme-foreground-dark: var(--color-gray-800);
@@ -64,6 +65,7 @@ https://github.com/tailwindlabs/tailwindcss/blob/next/packages/tailwindcss/theme
     --theme-secondary-foreground-dark: var(--color-gray-200);
     --theme-tertiary-dark: var(--color-gray-600);
     --theme-tertiary-foreground-dark: var(--color-gray-100);
+    --theme-accent-dark: var(--color-gray-800);
 
     --theme-muted: var(--color-gray-500);
     --theme-white: var(--color-gray-50);
@@ -91,7 +93,7 @@ https://github.com/tailwindlabs/tailwindcss/blob/next/packages/tailwindcss/theme
     --secondary-foreground: var(--theme-secondary-foreground);
     --muted: var(--theme-tertiary);
     --muted-foreground: var(--theme-muted);
-    --accent: var(--theme-tertiary);
+    --accent: var(--theme-accent);
     --accent-foreground: var(--theme-tertiary-foreground);
     --card: var(--theme-foreground);
     --card-foreground: var(--theme-primary);
@@ -117,7 +119,7 @@ https://github.com/tailwindlabs/tailwindcss/blob/next/packages/tailwindcss/theme
     --secondary-foreground: var(--theme-secondary-dark);
     --muted: var(--theme-tertiary-dark);
     --muted-foreground: var(--theme-muted);
-    --accent: var(--theme-tertiary-dark);
+    --accent: var(--theme-accent-dark);
     --accent-foreground: var(--theme-tertiary-foreground-dark);
     --card: var(--theme-foreground-dark);
     --card-foreground: var(--theme-primary-dark);

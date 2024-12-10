@@ -1,11 +1,14 @@
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import Link from 'next/link'
 
 export default function Header() {
   return (
-    <nav className="py-4">
+    <nav className="flex items-center justify-between py-4">
       <Link href="/" className="text-2xl font-black">
         npmignore
       </Link>
+
+      <ThemeToggle />
     </nav>
   )
 }

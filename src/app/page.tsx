@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ModeToggle } from '@/components/ui/theme-toggle'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { cn, humanNumbers, humanTime } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -125,7 +125,7 @@ function Page() {
         <Link href={'/search'} className="text-xl font-bold">
           npmignore
         </Link>
-        <ModeToggle />
+        <ThemeToggle />
       </div>
 
       <Form {...form}>

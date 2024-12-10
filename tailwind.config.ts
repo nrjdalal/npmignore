@@ -47,6 +47,10 @@ export default {
           DEFAULT: 'var(--destructive)',
           foreground: 'var(--destructive-foreground)',
         },
+        popover: {
+          DEFAULT: 'var(--background)',
+          foreground: 'var(--background-foreground)',
+        },
         border: 'var(--border)',
         input: 'var(--input)',
         ring: 'var(--ring)',
