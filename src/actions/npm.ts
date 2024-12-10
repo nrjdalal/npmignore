@@ -13,6 +13,25 @@ interface NpmSearch {
 }
 
 export interface NpmSearchResult {
+  formData: {
+    q: {
+      value: string
+    }
+    page: {
+      value: number
+    }
+    perPage: {
+      value: number
+    }
+    sortBy: {
+      value:
+        | 'score'
+        | 'downloads_weekly'
+        | 'downloads_monthly'
+        | 'dependent_count'
+        | 'published_at'
+    }
+  }
   total: number
   objects: {
     updated: string
@@ -76,5 +95,9 @@ export async function npmSearch({
   })
 
   const html = await res.text()
-  return JSON.parse(html.split('"context":')[1].split(',"chunks":')[0])
+  const json = JSON.parse(html.split('"context":')[1].split(',"chunks":')[0])
+
+  console.log(json?.formData)
+
+  return json
 }

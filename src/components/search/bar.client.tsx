@@ -15,7 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 import { Loader2, Search } from 'lucide-react'
-import { redirect } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -32,6 +32,7 @@ const DEFAULT_SEARCH_PARAMS = {
   q: '',
   page: 0,
   perPage: 100,
+  sortby: 'score',
 }
 
 export default function SearchBar({
@@ -39,14 +40,40 @@ export default function SearchBar({
 }: {
   initialSearchParams: { [key: string]: string }
 }) {
+  const router = useRouter()
+
   const [searching, setSearching] = useAtom(Searching)
   const [searchParams, setSearchParams] = useAtom(SearchParams)
-  const [, setSearchResults] = useAtom(SearchResults)
+  const [searchResult, setSearchResults] = useAtom(SearchResults)
 
   useQuery({
     queryKey: ['search'],
     queryFn: async () => {
-      setSearchResults({ total: -1, objects: [] })
+      if (searchParams?.q === searchResult?.formData?.q?.value) return true
+      setSearchResults({
+        formData: {
+          q: { value: initialSearchParams?.q || DEFAULT_SEARCH_PARAMS.q },
+          page: {
+            value:
+              Number(initialSearchParams?.page) || DEFAULT_SEARCH_PARAMS.page,
+          },
+          perPage: {
+            value:
+              Number(initialSearchParams?.perPage) ||
+              DEFAULT_SEARCH_PARAMS.perPage,
+          },
+          sortBy: {
+            value: DEFAULT_SEARCH_PARAMS.sortby as
+              | 'score'
+              | 'downloads_weekly'
+              | 'downloads_monthly'
+              | 'dependent_count'
+              | 'published_at',
+          },
+        },
+        total: -1,
+        objects: [],
+      })
       setSearchParams(initialSearchParams)
       setSearchResults(await npmSearch(initialSearchParams))
       return true
@@ -104,12 +131,8 @@ export default function SearchBar({
         {} as Record<string, string>,
       ),
     )
-    window.history.pushState(
-      {},
-      '',
-      `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
-    )
-  }, [searchParams])
+    router.push(`/search?${decodeURIComponent(params.toString())}`)
+  }, [searchParams, router])
 
   return (
     <Form {...form}>
