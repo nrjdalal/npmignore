@@ -4,6 +4,7 @@ import { npmSearch } from '@/actions/npm'
 import Content from '@/components/search/results/content'
 import Header from '@/components/search/results/header'
 import { useQuery } from '@tanstack/react-query'
+import { Loader2 } from 'lucide-react'
 
 export default function Index({
   searchParams,
@@ -17,8 +18,18 @@ export default function Index({
     },
   })
 
-  if (isLoading) return <div>Loading...</div>
-  if (isError) return <div>Error</div>
+  if (isLoading)
+    return (
+      <div className="mt-2 flex min-h-[90dvh] items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </div>
+    )
+  if (isError)
+    return (
+      <div className="mt-2 flex min-h-[90dvh] items-center justify-center">
+        Something went wrong.
+      </div>
+    )
 
   return (
     <div className="mt-2 min-h-dvh divide-y">
