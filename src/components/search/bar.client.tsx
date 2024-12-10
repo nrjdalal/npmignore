@@ -68,7 +68,7 @@ export default function SearchBar() {
     Object.entries(searchParams).forEach(([key, value]) => {
       form.setValue(key as any, value)
     })
-  }, [searchParams])
+  }, [form, searchParams])
 
   return (
     <Form {...form}>
