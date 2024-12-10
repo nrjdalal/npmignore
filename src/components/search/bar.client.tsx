@@ -15,7 +15,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 import { Loader2, Search } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -29,17 +28,15 @@ const formSchema = z.object({
 })
 
 export default function SearchBar() {
-  const { q, page, perPage } = Object.fromEntries(useSearchParams())
-
-  const [searchParams, setSearchParamState] = useAtom(SearchParams)
   const [searching, setSearching] = useAtom(Searching)
+  const [searchParams, setSearchParams] = useAtom(SearchParams)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      q: q || '',
-      page: Number(page) || 0,
-      perPage: Number(perPage) || 100,
+      q: searchParams.q || '',
+      page: Number(searchParams.page) || 0,
+      perPage: Number(searchParams.perPage) || 100,
     },
   })
 
@@ -47,11 +44,12 @@ export default function SearchBar() {
 
   const mutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
+      setSearching(true)
       return { results: await npmSearch(values), values }
     },
     onSuccess: (data) => {
-      setSearching(false)
       queryClient.setQueryData(['search'], data.results)
+      setSearching(false)
     },
     onError: (error) => {
       console.error(error)
@@ -60,7 +58,6 @@ export default function SearchBar() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (searching) return
-    setSearching(true)
     await mutation.mutateAsync(values)
   }
 
@@ -68,7 +65,15 @@ export default function SearchBar() {
     Object.entries(searchParams).forEach(([key, value]) => {
       form.setValue(key as 'q' | 'page' | 'perPage', value as string | number)
     })
-  }, [searchParams])
+    const params = new URLSearchParams(searchParams)
+    if (searchParams.q) {
+      window.history.pushState(
+        {},
+        '',
+        `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
+      )
+    }
+  }, [searchParams, form])
 
   return (
     <Form {...form}>
@@ -87,15 +92,11 @@ export default function SearchBar() {
                     placeholder="Search packages"
                     {...field}
                     onChange={(e) => {
-                      setSearchParamState({ q: e.target.value })
                       field.onChange(e)
-                      const params = new URLSearchParams(window.location.search)
-                      params.set('q', e.target.value)
-                      window.history.replaceState(
-                        {},
-                        '',
-                        `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
-                      )
+                      setSearchParams({
+                        ...searchParams,
+                        q: e.target.value,
+                      })
                     }}
                   />
                 </FormControl>

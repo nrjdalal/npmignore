@@ -18,23 +18,24 @@ export default function Content({
   description: string
   keywords: string[]
 }) {
+  const [searching, setSearching] = useAtom(Searching)
   const [searchParamsState, setSearchParamState] = useAtom<{ q?: string }>(
     SearchParams,
   )
-  const [searching, setSearching] = useAtom(Searching)
 
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
     mutationFn: async (keyword: string) => {
+      setSearching(true)
       return await npmSearch({
         ...searchParams,
         q: `keyword:${keyword}`,
       })
     },
     onSuccess: (data) => {
-      setSearching(false)
       queryClient.setQueryData(['search'], data)
+      setSearching(false)
     },
     onError: (error) => {
       console.error(error)
@@ -63,16 +64,11 @@ export default function Content({
                 if (searching || searchParamsState.q === `keyword:${keyword}`) {
                   return
                 }
-                setSearchParamState({ q: `keyword:${keyword}` })
-                setSearching(true)
+                setSearchParamState({
+                  ...searchParams,
+                  q: `keyword:${keyword}`,
+                })
                 mutation.mutate(keyword)
-                const params = new URLSearchParams(window.location.search)
-                params.set('q', `keyword:${keyword}`)
-                window.history.replaceState(
-                  {},
-                  '',
-                  `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
-                )
               }}
             >
               {keyword}
