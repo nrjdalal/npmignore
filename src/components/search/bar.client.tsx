@@ -49,31 +49,9 @@ export default function SearchBar({
   useQuery({
     queryKey: ['search'],
     queryFn: async () => {
-      if (searchParams?.q === searchResult?.formData?.q?.value) return true
-      setSearchResults({
-        formData: {
-          q: { value: initialSearchParams?.q || DEFAULT_SEARCH_PARAMS.q },
-          page: {
-            value:
-              Number(initialSearchParams?.page) || DEFAULT_SEARCH_PARAMS.page,
-          },
-          perPage: {
-            value:
-              Number(initialSearchParams?.perPage) ||
-              DEFAULT_SEARCH_PARAMS.perPage,
-          },
-          sortBy: {
-            value: DEFAULT_SEARCH_PARAMS.sortby as
-              | 'score'
-              | 'downloads_weekly'
-              | 'downloads_monthly'
-              | 'dependent_count'
-              | 'published_at',
-          },
-        },
-        total: -1,
-        objects: [],
-      })
+      console.log(searchParams?.q, searchResult?.formData?.search?.q?.value)
+      if (initialSearchParams?.q === searchResult?.formData?.search?.q?.value)
+        return true
       setSearchParams(initialSearchParams)
       setSearchResults(await npmSearch(initialSearchParams))
       return true
@@ -91,7 +69,9 @@ export default function SearchBar({
 
   const mutation = useMutation({
     mutationFn: async () => {
-      setSearching(true)
+      console.log('mutation', searchResult?.formData?.search?.q?.value)
+      if (initialSearchParams?.q === searchResult?.formData?.search?.q?.value)
+        setSearching(true)
       setSearchResults(await npmSearch(searchParams))
       setSearching(false)
       return true

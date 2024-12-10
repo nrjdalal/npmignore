@@ -14,22 +14,24 @@ interface NpmSearch {
 
 export interface NpmSearchResult {
   formData: {
-    q: {
-      value: string
-    }
-    page: {
-      value: number
-    }
-    perPage: {
-      value: number
-    }
-    sortBy: {
-      value:
-        | 'score'
-        | 'downloads_weekly'
-        | 'downloads_monthly'
-        | 'dependent_count'
-        | 'published_at'
+    search: {
+      q: {
+        value: string
+      }
+      page: {
+        value: number
+      }
+      perPage: {
+        value: number
+      }
+      sortBy: {
+        value:
+          | 'score'
+          | 'downloads_weekly'
+          | 'downloads_monthly'
+          | 'dependent_count'
+          | 'published_at'
+      }
     }
   }
   total: number
