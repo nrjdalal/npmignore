@@ -18,10 +18,10 @@ export default function Content({
   description: string
   keywords: string[]
 }) {
-  const [searchParamsState, setSearchParamState] = useAtom(SearchParams)
+  const [searchParamsState, setSearchParamState] = useAtom<{ q?: string }>(
+    SearchParams,
+  )
   const [searching, setSearching] = useAtom(Searching)
-
-  console.log(searchParamsState)
 
   const queryClient = useQueryClient()
 
@@ -60,7 +60,8 @@ export default function Content({
           >
             <button
               onClick={() => {
-                if (searching || searchParams.q === `keyword:${keyword}`) return
+                if (searching || searchParamsState.q === `keyword:${keyword}`)
+                  return
                 setSearching(true)
                 setSearchParamState({ q: `keyword:${keyword}` })
                 mutation.mutate(keyword)
