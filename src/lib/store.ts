@@ -13,7 +13,12 @@ interface SearchParamsType {
     | 'published_at'
 }
 
-export const DefaultSearchParams: SearchParamsType = {
+export const DefaultSearchParams: {
+  q: string
+  page: number
+  perPage: number
+  sortBy: 'score'
+} = {
   q: '',
   page: 0,
   perPage: 100,

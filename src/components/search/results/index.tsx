@@ -3,6 +3,7 @@
 import Content from '@/components/search/results/content'
 import Footer from '@/components/search/results/footer'
 import Header from '@/components/search/results/header'
+import Paginantion from '@/components/search/results/pagination'
 import { SearchResults } from '@/lib/store'
 import { useAtom } from 'jotai'
 import { Loader2 } from 'lucide-react'
@@ -50,6 +51,7 @@ export default function Index() {
           </div>
         )
       })}
+      <Paginantion />
     </div>
   )
 }
