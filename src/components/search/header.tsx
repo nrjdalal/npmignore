@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <nav className="flex items-center justify-between py-4">
       <Link href="/" className="text-2xl font-black">
-        npmignore-beta
+        npmignore beta
       </Link>
       <ThemeToggle />
     </nav>
