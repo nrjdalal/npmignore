@@ -15,7 +15,7 @@ export default function Header() {
         className="text-2xl font-black"
         onClick={() => setSearchParams({})}
       >
-        npmignore alpha
+        npmignore <span className="text-xs">v0.0.1-alpha</span>
       </Link>
       <ThemeToggle />
     </nav>
