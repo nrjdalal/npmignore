@@ -21,6 +21,8 @@ export default function Content({
   const [searchParamsState, setSearchParamState] = useAtom(SearchParams)
   const [searching, setSearching] = useAtom(Searching)
 
+  console.log(searchParamsState)
+
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
