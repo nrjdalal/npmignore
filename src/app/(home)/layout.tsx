@@ -3,13 +3,12 @@ import Header from '@/components/search/header'
 import { cn } from '@/lib/utils'
 import React from 'react'
 
-type SearchParams = Promise<{ [key: string]: string }>
-
-export default async function Page(props: {
+export default function Layout({
+  children, // will be a page or nested layout
+}: {
   children: React.ReactNode
-  searchParams: SearchParams
 }) {
-  const searchParams = await props.searchParams
+  const searchParams = {}
 
   return (
     <div className="mx-auto max-w-screen-lg overflow-x-hidden px-3.5 md:px-10">
@@ -25,7 +24,7 @@ export default async function Page(props: {
             'prose-p:text-secondary',
           )}
         >
-          {props.children}
+          {children}
         </section>
       </main>
     </div>

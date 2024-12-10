@@ -12,7 +12,7 @@ export default function Index() {
 
   if (data?.total === -1) {
     return (
-      <div className="flex min-h-dvh items-center justify-center">
+      <div className="flex min-h-[80dvh] items-center justify-center">
         <Loader2 className="animate-spin" />
       </div>
     )
