@@ -5,9 +5,18 @@ import Footer from '@/components/search/results/footer'
 import Header from '@/components/search/results/header'
 import { SearchResults } from '@/lib/store'
 import { useAtom } from 'jotai'
+import { Loader2 } from 'lucide-react'
 
 export default function Index() {
   const [data] = useAtom(SearchResults)
+
+  if (data?.total === -1) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </div>
+    )
+  }
 
   return (
     <div className="mb-12 mt-2 min-h-dvh divide-y">

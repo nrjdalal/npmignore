@@ -19,7 +19,7 @@ export default function Header({
     <div className="flex flex-wrap items-center justify-between font-mono">
       <Link href={url} className="flex gap-x-4 font-semibold" target="_blank">
         {name}
-        {searchParams.q === name && (
+        {searchParams?.q === name && (
           <span className="flex items-center rounded-md bg-purple-200 px-2 text-xs font-normal text-secondary dark:text-muted">
             exact match
           </span>

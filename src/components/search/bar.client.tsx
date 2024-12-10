@@ -46,11 +46,9 @@ export default function SearchBar({
   useQuery({
     queryKey: ['search'],
     queryFn: async () => {
-      setSearching(true)
-      setSearchResults({ total: 0, objects: [] })
+      setSearchResults({ total: -1, objects: [] })
       setSearchParams(initialSearchParams)
       setSearchResults(await npmSearch(initialSearchParams))
-      setSearching(false)
       return true
     },
   })
@@ -58,9 +56,9 @@ export default function SearchBar({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      q: searchParams.q || DEFAULT_SEARCH_PARAMS.q,
-      page: Number(searchParams.page) || DEFAULT_SEARCH_PARAMS.page,
-      perPage: Number(searchParams.perPage) || DEFAULT_SEARCH_PARAMS.perPage,
+      q: searchParams?.q || DEFAULT_SEARCH_PARAMS.q,
+      page: Number(searchParams?.page) || DEFAULT_SEARCH_PARAMS.page,
+      perPage: Number(searchParams?.perPage) || DEFAULT_SEARCH_PARAMS.perPage,
     },
   })
 
@@ -90,7 +88,7 @@ export default function SearchBar({
   }
 
   useEffect(() => {
-    if (!searchParams.q) return
+    if (!searchParams?.q) return
     const params = new URLSearchParams(
       Object.entries(searchParams).reduce(
         (acc, [key, value]) => {
@@ -126,7 +124,7 @@ export default function SearchBar({
                 <FormControl>
                   <Input
                     className="h-12 rounded-none border-none bg-foreground font-mono ring-inset sm:pl-12"
-                    placeholder={searchParams.q || 'Search packages'}
+                    placeholder={searchParams?.q || 'Search packages'}
                     {...field}
                   />
                 </FormControl>
