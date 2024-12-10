@@ -1,37 +1,31 @@
 'use client'
 
 import { npmSearch } from '@/actions/npm'
-import { Searching } from '@/lib/store'
+import { Searching, SearchParams, SearchResults } from '@/lib/store'
 import { cn } from '@/lib/utils'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 import Link from 'next/link'
 
 export default function Content({
-  searchParams,
   name,
   description,
   keywords,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined }
   name: string
   description: string
   keywords: string[]
 }) {
   const [searching, setSearching] = useAtom(Searching)
-
-  const queryClient = useQueryClient()
+  const [searchParams, setSearchParams] = useAtom(SearchParams)
+  const [, setSearchResults] = useAtom(SearchResults)
 
   const mutation = useMutation({
-    mutationFn: async (keyword: string) => {
-      return await npmSearch({
-        ...searchParams,
-        q: `keyword:${keyword}`,
-      })
-    },
-    onSuccess: (data) => {
+    mutationFn: async () => {
+      setSearching(true)
+      setSearchResults(await npmSearch(searchParams))
       setSearching(false)
-      queryClient.setQueryData(['search'], data)
+      return true
     },
     onError: (error) => {
       console.error(error)
@@ -56,17 +50,14 @@ export default function Content({
             )}
           >
             <button
-              onClick={() => {
+              onClick={async () => {
+                if (searchParams.q === `keyword:${keyword}`) return
                 if (searching) return
-                setSearching(true)
-                mutation.mutate(keyword)
-                const params = new URLSearchParams(window.location.search)
-                params.set('q', `keyword:${keyword}`)
-                window.history.replaceState(
-                  {},
-                  '',
-                  `${window.location.pathname}?${params}`,
-                )
+                setSearchParams({
+                  ...searchParams,
+                  q: `keyword:${keyword}`,
+                })
+                mutation.mutateAsync()
               }}
             >
               {keyword}

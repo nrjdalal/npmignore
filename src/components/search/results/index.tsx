@@ -1,49 +1,51 @@
 'use client'
 
-import { npmSearch } from '@/actions/npm'
 import Content from '@/components/search/results/content'
+import Footer from '@/components/search/results/footer'
 import Header from '@/components/search/results/header'
-import { useQuery } from '@tanstack/react-query'
+import { SearchResults } from '@/lib/store'
+import { useAtom } from 'jotai'
+import { Loader2 } from 'lucide-react'
 
-export default function Index({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined }
-}) {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['search'],
-    queryFn: async () => {
-      return await npmSearch(searchParams)
-    },
-  })
+export default function Index() {
+  const [data] = useAtom(SearchResults)
 
-  if (isLoading) return <div>Loading...</div>
-  if (isError) return <div>Error</div>
+  if (data?.total === -1) {
+    return (
+      <div className="flex min-h-[80dvh] items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </div>
+    )
+  }
 
   return (
-    <div className="mt-2 min-h-dvh divide-y">
-      {data?.objects.map((result) => {
+    <div className="mb-12 mt-2 min-h-dvh divide-y">
+      {data?.objects?.map((result) => {
         const pkg = {
           name: result.package.name,
-          downloads: result.package.downloads,
           url: `https://npmjs.com/package/${result.package.name}`,
+          downloads: result.package.downloads,
           description: result.package.description,
           keywords: result.package.keywords,
+          publisher: result.package.publisher,
+          version: result.package.version,
+          date: result.package.date,
+          dependents: result.package.dependents,
         }
 
         return (
           <div key={pkg.name} className="overflow-x-hidden py-3">
-            <Header
-              q={searchParams.q as string}
-              name={pkg.name}
-              url={pkg.url}
-              downloads={pkg.downloads}
-            />
+            <Header name={pkg.name} url={pkg.url} downloads={pkg.downloads} />
             <Content
-              searchParams={searchParams}
               name={pkg.name}
               description={pkg.description}
               keywords={pkg.keywords}
+            />
+            <Footer
+              publisher={pkg.publisher}
+              version={pkg.version}
+              date={pkg.date}
+              dependents={pkg.dependents}
             />
           </div>
         )

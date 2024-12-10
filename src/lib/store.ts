@@ -1,4 +1,15 @@
+import { NpmSearchResult } from '@/actions/npm'
 import { atom } from 'jotai'
 
-export const Searching = atom(false)
-export const StoredResults = atom([])
+interface SearchParamsType {
+  q?: string
+  page?: number
+  perPage?: number
+}
+
+export const SearchParams = atom<SearchParamsType>({})
+export const Searching = atom<boolean>(false)
+export const SearchResults = atom<NpmSearchResult>({
+  total: 0,
+  objects: [],
+})

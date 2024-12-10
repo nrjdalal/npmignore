@@ -12,7 +12,7 @@ interface NpmSearch {
     | 'published_at'
 }
 
-interface NpmSearchResult {
+export interface NpmSearchResult {
   total: number
   objects: {
     updated: string
@@ -54,6 +54,7 @@ interface NpmSearchResult {
     }
   }[]
 }
+
 export async function npmSearch({
   q = 'shadcn',
   page = 0,
