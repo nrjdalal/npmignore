@@ -104,7 +104,7 @@ export default function SearchBar({
         {} as Record<string, string>,
       ),
     )
-    window.history.pushState(
+    window.history.replaceState(
       {},
       '',
       `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
