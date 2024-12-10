@@ -49,9 +49,24 @@ export default function SearchBar({
   useQuery({
     queryKey: ['search'],
     queryFn: async () => {
-      console.log(searchParams?.q, searchResult?.formData?.search?.q?.value)
-      if (initialSearchParams?.q === searchResult?.formData?.search?.q?.value)
+      // home page
+      if (window.location.pathname === '/') return true
+      // no search query
+      if (window.location.search === '') {
+        setSearchResults({
+          formData: {
+            search: {
+              q: { value: '' },
+              page: { value: 0 },
+              perPage: { value: 0 },
+              sortBy: { value: 'score' },
+            },
+          },
+          total: 0,
+          objects: [],
+        })
         return true
+      }
       setSearching(true)
       setSearchParams(initialSearchParams)
       setSearchResults(await npmSearch(initialSearchParams))
