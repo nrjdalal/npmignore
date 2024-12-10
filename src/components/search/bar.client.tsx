@@ -66,7 +66,7 @@ export default function SearchBar() {
 
   useEffect(() => {
     Object.entries(searchParams).forEach(([key, value]) => {
-      form.setValue(key as any, value)
+      form.setValue(key as 'q' | 'page' | 'perPage', value as string | number)
     })
   }, [form, searchParams])
 
