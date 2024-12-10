@@ -11,7 +11,7 @@ export default function Header({
 }: {
   name: string
   url: string
-  downloads: { weekly: number; monthly: number }
+  downloads: { monthly: number; weekly: number }
 }) {
   const [searchParams] = useAtom(SearchParams)
 
@@ -26,13 +26,13 @@ export default function Header({
         )}
       </Link>
       <div className="flex items-center justify-end gap-x-1.5 text-sm">
-        <Download className="size-4" />
         <span className="mt-px">
           {humanNumbers(downloads.monthly)}
           {/* {form.getValues().sortBy === 'downloads_weekly'
             ? humanNumbers(item.package.downloads.weekly)
             : humanNumbers(item.package.downloads.monthly)} */}
         </span>
+        <Download className="size-4" />
       </div>
     </div>
   )

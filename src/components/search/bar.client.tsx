@@ -15,6 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 import { Loader2, Search } from 'lucide-react'
+import { redirect } from 'next/navigation'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -67,6 +68,9 @@ export default function SearchBar({
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (window.location.pathname !== '/search') {
+      return redirect(`/search?q=${values.q}`)
+    }
     if (searching || searchParams.q === values.q) return
     setSearchParams({
       ...searchParams,
@@ -98,7 +102,7 @@ export default function SearchBar({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="w-full" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="relative flex">
           <Search className="absolute top-3.5 mx-3.5 hidden size-5 text-muted-foreground sm:block" />
           <FormField
