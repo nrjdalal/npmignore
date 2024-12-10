@@ -14,7 +14,7 @@ export default function Header({
   downloads: { weekly: number; monthly: number }
 }) {
   return (
-    <div className="flex flex-wrap items-center justify-between">
+    <div className="flex flex-wrap items-center justify-between font-mono">
       <Link href={url} className="flex gap-x-4 font-semibold" target="_blank">
         {name}
         {q === name && (
