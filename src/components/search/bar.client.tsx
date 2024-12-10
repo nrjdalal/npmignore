@@ -9,12 +9,13 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Searching } from '@/lib/store'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
 import { Search } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -29,7 +30,7 @@ const formSchema = z.object({
 export default function SearchBar() {
   const { q, page, perPage } = Object.fromEntries(useSearchParams())
 
-  const [searching, setSearching] = useState(false)
+  const [searching, setSearching] = useAtom(Searching)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,7 +48,7 @@ export default function SearchBar() {
       return { results: await npmSearch(values), values }
     },
     onSuccess: (data) => {
-      setSearching(false)
+      setSearching(!searching)
       queryClient.setQueryData(['search'], data.results)
     },
     onError: (error) => {
@@ -56,7 +57,7 @@ export default function SearchBar() {
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setSearching(true)
+    setSearching(!searching)
     await mutation.mutateAsync(values)
   }
 

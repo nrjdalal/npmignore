@@ -1,8 +1,10 @@
 'use client'
 
 import { npmSearch } from '@/actions/npm'
+import { Searching } from '@/lib/store'
 import { cn } from '@/lib/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
 import Link from 'next/link'
 
 export default function Content({
@@ -16,6 +18,8 @@ export default function Content({
   description: string
   keywords: string[]
 }) {
+  const [searching, setSearching] = useAtom(Searching)
+
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
@@ -26,6 +30,7 @@ export default function Content({
       })
     },
     onSuccess: (data) => {
+      setSearching(!searching)
       queryClient.setQueryData(['search'], data)
     },
     onError: (error) => {
@@ -48,9 +53,8 @@ export default function Content({
             className="rounded-md bg-gray-100 px-2 py-1 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
           >
             <button
-              // href={`/search?q=keyword:${keyword}`}
-              // prefetch={false}
               onClick={() => {
+                setSearching(!searching)
                 mutation.mutate(keyword)
                 const params = new URLSearchParams(window.location.search)
                 params.set('q', `keyword:${keyword}`)
