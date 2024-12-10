@@ -1,6 +1,6 @@
 ## What is npmignore?
 
-npmignore - search engine for npm but on steroids
+npmignore - search engine for npm but on steroids, ignoring the mess of npm
 
 - Fully open source and free to use
 - View the source code on [GitHub](https://github.com/nrjdalal/npmignore).
