@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
-import { Search } from 'lucide-react'
+import { Loader2, Search } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -96,16 +96,22 @@ export default function SearchBar() {
           />
           <button
             className={cn(
-              'h-12 rounded-none bg-primary px-8 text-background sm:px-12',
-              searching && 'cursor-wait opacity-50',
+              'flex h-12 w-24 items-center justify-center rounded-none bg-primary text-background sm:w-48 sm:px-12',
+              searching && 'opacity-50',
             )}
             disabled={searching}
             type="submit"
           >
-            <Search className="size-5 sm:hidden" />
-            <span className="hidden font-mono text-sm font-semibold sm:block">
-              Search
-            </span>
+            {searching ? (
+              <Loader2 className="size-5 animate-spin" />
+            ) : (
+              <p>
+                <Search className="size-5 sm:hidden" />
+                <span className="hidden font-mono text-sm font-semibold sm:block">
+                  Search
+                </span>
+              </p>
+            )}
           </button>
         </div>
       </form>
