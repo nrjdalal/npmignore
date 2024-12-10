@@ -52,8 +52,10 @@ export default function SearchBar({
       console.log(searchParams?.q, searchResult?.formData?.search?.q?.value)
       if (initialSearchParams?.q === searchResult?.formData?.search?.q?.value)
         return true
+      setSearching(true)
       setSearchParams(initialSearchParams)
       setSearchResults(await npmSearch(initialSearchParams))
+      setSearching(false)
       return true
     },
   })
