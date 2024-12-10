@@ -1,4 +1,6 @@
+import { SearchParams } from '@/lib/store'
 import { humanNumbers } from '@/lib/utils'
+import { useAtom } from 'jotai'
 import { Download } from 'lucide-react'
 import Link from 'next/link'
 
@@ -13,11 +15,13 @@ export default function Header({
   url: string
   downloads: { weekly: number; monthly: number }
 }) {
+  const [searchParams] = useAtom<{ q?: string }>(SearchParams)
+
   return (
     <div className="flex flex-wrap items-center justify-between font-mono">
       <Link href={url} className="flex gap-x-4 font-semibold" target="_blank">
         {name}
-        {q === name && (
+        {searchParams.q === name && (
           <span className="flex items-center rounded-md bg-purple-200 px-2 text-xs font-normal text-muted-foreground">
             exact match
           </span>

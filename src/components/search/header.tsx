@@ -7,7 +7,6 @@ export default function Header() {
       <Link href="/" className="text-2xl font-black">
         npmignore-beta
       </Link>
-
       <ThemeToggle />
     </nav>
   )
