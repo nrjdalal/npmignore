@@ -5,17 +5,15 @@ import { Download } from 'lucide-react'
 import Link from 'next/link'
 
 export default function Header({
-  q,
   name,
   url,
   downloads,
 }: {
-  q: string
   name: string
   url: string
   downloads: { weekly: number; monthly: number }
 }) {
-  const [searchParams] = useAtom<{ q?: string }>(SearchParams)
+  const [searchParams] = useAtom(SearchParams)
 
   return (
     <div className="flex flex-wrap items-center justify-between font-mono">

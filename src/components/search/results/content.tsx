@@ -1,41 +1,31 @@
 'use client'
 
 import { npmSearch } from '@/actions/npm'
-import { Searching, SearchParams } from '@/lib/store'
+import { Searching, SearchParams, SearchResults } from '@/lib/store'
 import { cn } from '@/lib/utils'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 import Link from 'next/link'
 
 export default function Content({
-  searchParams,
   name,
   description,
   keywords,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined }
   name: string
   description: string
   keywords: string[]
 }) {
   const [searching, setSearching] = useAtom(Searching)
-  const [searchParamsState, setSearchParamState] = useAtom<{ q?: string }>(
-    SearchParams,
-  )
-
-  const queryClient = useQueryClient()
+  const [searchParams, setSearchParams] = useAtom(SearchParams)
+  const [, setSearchResults] = useAtom(SearchResults)
 
   const mutation = useMutation({
-    mutationFn: async (keyword: string) => {
+    mutationFn: async () => {
       setSearching(true)
-      return await npmSearch({
-        ...searchParams,
-        q: `keyword:${keyword}`,
-      })
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(['search'], data)
+      setSearchResults(await npmSearch(searchParams))
       setSearching(false)
+      return true
     },
     onError: (error) => {
       console.error(error)
@@ -60,15 +50,14 @@ export default function Content({
             )}
           >
             <button
-              onClick={() => {
-                if (searching || searchParamsState.q === `keyword:${keyword}`) {
-                  return
-                }
-                setSearchParamState({
+              onClick={async () => {
+                if (searchParams.q === `keyword:${keyword}`) return
+                if (searching) return
+                setSearchParams({
                   ...searchParams,
                   q: `keyword:${keyword}`,
                 })
-                mutation.mutate(keyword)
+                mutation.mutateAsync()
               }}
             >
               {keyword}
