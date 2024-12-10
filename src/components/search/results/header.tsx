@@ -22,7 +22,7 @@ export default function Header({
       <Link href={url} className="flex gap-x-4 font-semibold" target="_blank">
         {name}
         {searchParams.q === name && (
-          <span className="flex items-center rounded-md bg-purple-200 px-2 text-xs font-normal text-muted-foreground">
+          <span className="flex items-center rounded-md bg-purple-200 px-2 text-xs font-normal text-muted">
             exact match
           </span>
         )}
