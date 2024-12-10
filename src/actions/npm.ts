@@ -77,7 +77,7 @@ export interface NpmSearchResult {
 }
 
 export async function npmSearch({
-  q = 'shadcn',
+  q = '',
   page = 0,
   perPage = 100,
   sortBy = 'score',
@@ -89,6 +89,21 @@ export async function npmSearch({
     sortBy: sortBy,
   }).toString()
 
+  if (q === '') {
+    return {
+      formData: {
+        search: {
+          q: { value: '' },
+          page: { value: 0 },
+          perPage: { value: 0 },
+          sortBy: { value: 'score' },
+        },
+      },
+      total: -1,
+      objects: [],
+    }
+  }
+
   const res = await fetch(`https://www.npmjs.com/search?${queryParams}`, {
     method: 'GET',
     headers: {
@@ -98,8 +113,6 @@ export async function npmSearch({
 
   const html = await res.text()
   const json = JSON.parse(html.split('"context":')[1].split(',"chunks":')[0])
-
-  console.log(json?.formData)
 
   return json
 }
