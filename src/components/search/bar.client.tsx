@@ -67,6 +67,8 @@ export default function SearchBar({
         })
         return true
       }
+      // no reload on revisits
+      if (initialSearchParams?.q === searchParams?.q) return true
       setSearching(true)
       setSearchParams(initialSearchParams)
       setSearchResults(await npmSearch(initialSearchParams))
